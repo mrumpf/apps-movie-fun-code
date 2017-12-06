@@ -12,11 +12,11 @@ public class SmokeTest {
     public void smokeTest() {
         RestTemplate restTemplate = new RestTemplate();
 
-        String homePage = restTemplate.getForObject(url("/"), String.class);
+        String homePage = restTemplate.getForObject(url("/index"), String.class);
 
         assertThat(homePage, containsString("Please select one of the following links:"));
 
-        String setupPage = restTemplate.getForObject(url("/setup.jsp"), String.class);
+        String setupPage = restTemplate.getForObject(url("/setup"), String.class);
 
         assertThat(setupPage, containsString("Wedding Crashers"));
         assertThat(setupPage, containsString("Starsky & Hutch"));
