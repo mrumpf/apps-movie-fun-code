@@ -1,5 +1,6 @@
 package org.superbiz.moviefun.albums;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.tika.io.IOUtils;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -19,6 +20,7 @@ import java.util.Optional;
 import static java.lang.String.format;
 import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
 
+@Slf4j
 @Controller
 @RequestMapping("/albums")
 public class AlbumsController {
@@ -46,14 +48,14 @@ public class AlbumsController {
 
     @PostMapping("/{albumId}/cover")
     public String uploadCover(@PathVariable Long albumId, @RequestParam("file") MultipartFile uploadedFile) {
-        System.out.println("Uploading cover for album with id " + albumId);
+        log.debug("Uploading cover for album with id " + albumId);
 
         if (uploadedFile.getSize() > 0) {
             try {
                 tryToUploadCover(albumId, uploadedFile);
 
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("There was an error while uploading album cover", e);
             }
         }
 
