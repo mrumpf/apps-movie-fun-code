@@ -6,17 +6,22 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/movies?useSSL=false
     username: root
+    password: admin
 
   mvc.view:
     prefix: /WEB-INF/
     suffix: .jsp
 
 logging.level:
-  root: WARN
+  root: DEBUG
   org.superbiz.moviefun: DEBUG
 
 s3:
-  endpointUrl: <aws endpoint>
-  accessKey: <access key id>
-  secretKey: <secret access key>
-  bucketName: <name of the bucket>
+  endpointUrl: http://127.0.0.1:9000
+  accessKey: Q68GV9SY1H2SOSQAZ2NT
+  secretKey: Gfl5B7bu87F5KVzd/NR1PXmRKbiHZ6UaYlra6mDK
+  bucketName: movierun
+
+rabbitmq:
+  uri: amqp://guest:guest@localhost
+  queue: my-rabbit-queue
