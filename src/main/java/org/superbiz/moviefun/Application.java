@@ -8,8 +8,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.superbiz.moviefun.blobstore.BlobStore;
 import org.superbiz.moviefun.blobstore.S3Store;
+
+import java.util.UUID;
 
 @SpringBootApplication
 public class Application {
@@ -35,5 +40,29 @@ public class Application {
         s3Client.setEndpoint(s3EndpointUrl);
 
         return new S3Store(s3Client, s3BucketName);
+    }
+
+    @Value("${redis.host}") String redisHost;
+    @Value("${redis.password}") String redisPassword;
+    @Value("${redis.port}") int redisPort;
+
+    @Bean
+    public JedisConnectionFactory redisConnectionFactory() {
+        JedisConnectionFactory redisConnectionFactory = new JedisConnectionFactory();
+
+        // Defaults
+        redisConnectionFactory.setHostName(redisHost);
+        if (redisPassword != null) {
+            redisConnectionFactory.setPassword(redisPassword);
+        }
+        redisConnectionFactory.setPort(redisPort);
+        return redisConnectionFactory;
+    }
+
+    @Bean
+    public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory cf) {
+        RedisTemplate<String, String> redisTemplate = new RedisTemplate<String, String>();
+        redisTemplate.setConnectionFactory(cf);
+        return redisTemplate;
     }
 }
